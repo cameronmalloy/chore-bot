@@ -15,7 +15,7 @@ DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 #cur.execute("DROP TABLE jobs")
-cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial NOT NULL PRIMARY KEY, job_name varchar, info json NOT NULL);")
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial NOT NULL PRIMARY KEY, job_name varchar, info json);")
 conn.commit()
 cur.close()
 conn.close()
@@ -81,8 +81,8 @@ def webhook():
 
     return "ok", 200
 
+'''
 def create_job(job_name, notif_1, notif_2, senderid):
-    '''
     if not jobs.get(job_name):
         job = {}
         job['members'] = {senderid: [notif_1, notif_2]}
@@ -95,8 +95,8 @@ def create_job(job_name, notif_1, notif_2, senderid):
         conn.commit()
         cur.close()
         conn.close()
-    '''
     return
+'''
 
 def send_message(recipient_id, message_text):
 
