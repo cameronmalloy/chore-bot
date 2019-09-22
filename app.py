@@ -10,13 +10,14 @@ from flask import Flask, request
 app = Flask(__name__)
 
 DATABASE_URL = os.environ['DATABASE_URL']
-CREATE_TABLE = True
+DELETE_TABLE = True
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 #cur.execute("DROP TABLE jobs")
-if CREATE_TABLE:
-    cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, info json);")
+if DELETE_TABLE:
+    cur.execute("DROP TABLE jobs;")
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, info json);")
 conn.commit()
 cur.close()
 conn.close()
@@ -89,7 +90,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
         print('inserting')
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()
-        print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(jobs)))
+        print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         cur.execute("INSERT INTO jobs (job_name, info) VALUES ('%s', '%s')" % (job_name, json.dumps(jobs)))
         conn.commit()
         cur.close()
