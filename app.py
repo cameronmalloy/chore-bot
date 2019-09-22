@@ -23,11 +23,11 @@ conn.close()
 cur.execute("INSERT INTO jobs (job_name, members, notifications, chores) VALUES (%s, %s, %s, %s);", ("TEST", "['member1', 'member2']", "notifications_test", "chores_test"))
 cur.execute("SELECT * FROM jobs;")
 print(cur.fetchone())
-'''
 
 conn.commit()
 cur.close()
 conn.close()
+'''
 
 @app.route('/', methods=['GET'])
 def verify():
