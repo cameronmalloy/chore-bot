@@ -61,7 +61,7 @@ def webhook():
                         params = message_parsed[1:]
                         params = params + [sender_id]
                         print(params)
-                        #create_job(*params)
+                        create_job(*params)
                     
                     #send_message(sender_id, "roger that!")
 
