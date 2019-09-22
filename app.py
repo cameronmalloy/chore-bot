@@ -86,6 +86,7 @@ def webhook():
 
     return "ok", 200
 
+'''
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -103,6 +104,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn.commit()
     cur.close()
     conn.close()
+'''
 
 
 def send_message(recipient_id, message_text):
