@@ -30,9 +30,11 @@ def webhook():
     print('webhook')
     # endpoint for processing incoming messaging events
 
-    data = request.get_json()
+    #data = request.get_json()
     #log(data)  # you may not want to log every incoming message in production, but it's good for testing
-    print(data)
+    
+    with open('jobs.txt') as jobs:
+        jobs = json.load(jobs)
 
     if data["object"] == "page":
 
@@ -73,9 +75,8 @@ def create_job(job_name, notif_1, notif_2, senderid):
         job = jobs[job_name]
         job['members'] = {senderid: [notif_1, notif_2]}
         job['notif_rates'] = [notif_1, notif_2]
-    print(jobs)
+    #print(jobs)
     with open('jobs.txt', 'w') as outfile:
-        print("I'M WRITING!")
         json.dump(jobs, outfile)
 
 def send_message(recipient_id, message_text):
