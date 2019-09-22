@@ -10,14 +10,14 @@ from flask import Flask, request
 app = Flask(__name__)
 
 DATABASE_URL = os.environ['DATABASE_URL']
-DELETE_TABLE = False
+DELETE_TABLE = True
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 #cur.execute("DROP TABLE jobs")
 if DELETE_TABLE:
     cur.execute("DROP TABLE jobs;")
-cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, chores varchar, info json);")
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, info json);")
 conn.commit()
 cur.close()
 conn.close()
