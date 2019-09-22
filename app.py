@@ -10,7 +10,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 DATABASE_URL = os.environ['DATABASE_URL']
-DELETE_TABLE = True
+DELETE_TABLE = False
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
