@@ -66,8 +66,7 @@ def webhook():
                         params = message_parsed[1:]
                         params = params + [sender_id]
                         create_job(*params)
-
-                    if chores[0]:
+                    elif chores[0]:
                         if message_text == 'Done' or message_text == 'done':
                             add_chores()
                         else:
