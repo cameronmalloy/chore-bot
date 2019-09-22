@@ -71,6 +71,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
         job = jobs[job_name]
         job['members'] = {senderid: [notif_1, notif_2]}
         job['notif_rates'] = [notif_1, notif_2]
+    print(jobs)
     with open('jobs.txt', 'w') as outfile:
         json.dump(jobs, outfile)
 
