@@ -95,7 +95,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     cur.execute("SELECT job_name FROM jobs;")
     current_jobs = cur.fetchone()
     print(current_jobs)
-    if current_jobs is not None and job_name not in current_jobs:
+    if current_jobs is None or job_name not in current_jobs:
         cur.execute("INSERT INTO jobs (job_name, members, notif_1, notif_2, chores) VALUES (%s, %s, %, %, %s);", (job_name, str([senderid]), notif_1, notif_2, chores))
     else:
         send_message(senderid, "That job already exists!")
