@@ -43,7 +43,6 @@ listen_for_chores = False
 
 @app.route('/', methods=['POST'])
 def webhook():
-    global chore_job, chores, listen_for_chores
     print('webhook')
     # endpoint for processing incoming messaging events
 
