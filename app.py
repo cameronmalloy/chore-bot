@@ -9,6 +9,15 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+DATABASE_URL = os.environ['DATABASE_URL']
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cur = conn.cursor()
+cur.execute("CREATE TABLE IF NOT EXIST jobs (id serial NOT NULL PRIMARY KEY, info json NOT NULL;")
+conn.commit()
+cur.close()
+conn.close()
+
 with open('jobs.txt') as jobs:
     jobs = json.load(jobs)
 
@@ -75,9 +84,13 @@ def create_job(job_name, notif_1, notif_2, senderid):
         job = jobs[job_name]
         job['members'] = {senderid: [notif_1, notif_2]}
         job['notif_rates'] = [notif_1, notif_2]
-    #print(jobs)
-    with open('jobs.txt', 'w') as outfile:
-        json.dump(jobs, outfile)
+        print('inserting')
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cur = conn.cursor()
+        cur.execute("INSERT INTO jobs (info) {}".format(json.dumps(jobs)))
+        conn.commit()
+        cur.close()
+        conn.close()
 
 def send_message(recipient_id, message_text):
 
