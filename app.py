@@ -63,6 +63,7 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
+                    '''
                     message_parsed = message_text.split(' ')
                     print('MESSAGE PARSED: ', message_parsed)
                     if message_parsed[0] == '!create':
@@ -77,6 +78,7 @@ def webhook():
                             add_chores()
                         else:
                             chores.append(message_text)
+                    '''
                     
                     #send_message(sender_id, "roger that!")
 
