@@ -16,7 +16,7 @@ try:
     cur.execute("SELECT * FROM jobs LIMIT 10;")
 except:
     cur.execute("CREATE TABLE jobs (id serial PRIMARY KEY, name varchar, members varchar, notifications varchar, pre_notifications varchar);")
-    cur.execute("INSERT INTO jobs (name, members, notifications, pre_notifications) VALUES (%s, %s, %s, %s)", ("TEST", "member_test" "notifications_test", "pre_notifications_test"))
+    cur.execute("INSERT INTO jobs (name, members, notifications, pre_notifications) VALUES (%s, %s, %s, %s)", ("TEST", "member_test", "notifications_test", "pre_notifications_test"))
     cur.execute("SELECT * FROM test;")
     print(cur.fetchone())
 
