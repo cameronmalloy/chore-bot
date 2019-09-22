@@ -88,7 +88,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(jobs)))
-        cur.execute("INSERT INTO jobs (info) VALUES ('%s')" % (job_name, json.dumps(jobs)))
+        cur.execute("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(jobs)))
         conn.commit()
         cur.close()
         conn.close()
