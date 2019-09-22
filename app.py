@@ -2,6 +2,7 @@ import os
 import sys
 import json
 from datetime import datetime
+from threading import Lock
 import psycopg2
 
 import requests
@@ -13,8 +14,13 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
+lock = Lock()
+lock.acquire()
 cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar, notif_1 int, notif_2 int, pre_notifications varchar);")
+lock.release()
+lock.require()
 cur.execute("CREATE TABLE IF NOT EXISTS members (job_name varchar, member varchar, notif_1 int, notif_2 int);")
+lock.release()
 conn.commit()
 cur.close()
 conn.close()
