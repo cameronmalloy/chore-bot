@@ -1,4 +1,4 @@
-#!/Users/cameronmalloy/Desktop/projects/fb-messenger-bot/env/bin/python
+#!/Users/cameronmalloy/Desktop/projects/chore-bot/env/bin/python
 
 import sys
 import getopt
