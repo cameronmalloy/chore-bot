@@ -35,8 +35,13 @@ def verify():
 
     return "Hello world", 200
 
+chore_job = None
+chores = []
+listen_for_chores = False
+
 @app.route('/', methods=['POST'])
 def webhook():
+    global chore_job, chores, listen_for_chores
     print('webhook')
     # endpoint for processing incoming messaging events
 
@@ -85,9 +90,6 @@ def webhook():
 
     return "ok", 200
 
-chore_job = None
-chores = []
-listen_for_chores = False
 def create_job(job_name, notif_1, notif_2, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -112,6 +114,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
     conn.close()
 
 def add_chores():
+    global chore_job, chores, listen_for_chores
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chore_job)
