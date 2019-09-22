@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cur = conn.cursor()
 cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
 cur.execute("INSERT INTO test(num, data) VALUES ({0}, {1})".format(100, "abc'def"))
 cur.execute("SELECT * FROM test;")
