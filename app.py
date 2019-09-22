@@ -12,6 +12,8 @@ app = Flask(__name__)
 DATABASE_URL = os.environ['DATABASE_URL']
 DELETE_TABLE = True
 
+chores = [False, None]
+
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 #cur.execute("DROP TABLE jobs")
@@ -35,7 +37,6 @@ def verify():
 
     return "Hello world", 200
 
-chores = [False, None]
 
 @app.route('/', methods=['POST'])
 def webhook():
