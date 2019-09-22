@@ -9,6 +9,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+'''
 DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -17,6 +18,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar,
 conn.commit()
 cur.close()
 conn.close()
+'''
 
 ### EXAMPLE OF HOW TO INSERT ###
 '''
@@ -68,7 +70,8 @@ def webhook():
                         params = message_parsed[1:]
                         params[-1] = str(params[-1])
                         params = params + [sender_id]
-                        create_job(*params)
+                        print(params)
+                        #create_job(*params)
 
                     #send_message(sender_id, "roger that!")
 
@@ -91,7 +94,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     current_jobs = cur.fetchone()
     print(current_jobs)
     if current_jobs is None or job_name not in current_jobs:
-        cur.execute("INSERT INTO jobs (job_name, members, notif_1, notif_2, notification_times_bools, chores) VALUES (%s, %s, %, %, %s);", (job_name, str([senderid]), notif_1, notif_2, str([[int(notif_1), int(notif_2)]]), chores))
+        cur.execute("INSERT INTO jobs (job_name, members, notif_1, notif_2, notification_times_bools, chores) VALUES (%s, %s, %, %, %s);", (job_name, str([senderid]), int(notif_1), int(notif_2), str([[int(notif_1), int(notif_2)]]), chores))
     else:
         send_message(senderid, "That job already exists!")
     cur.execute("SELECT job_name FROM jobs;")
