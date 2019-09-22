@@ -22,9 +22,6 @@ conn.commit()
 cur.close()
 conn.close()
 
-with open('jobs.txt') as jobs:
-    jobs = json.load(jobs)
-
 @app.route('/', methods=['GET'])
 def verify():
     # when the endpoint is registered as a webhook, it must echo back
@@ -67,8 +64,6 @@ def webhook():
                         params = params + [sender_id]
                         create_job(*params)
                     
-                    print(jobs)
-
                     #send_message(sender_id, "roger that!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
@@ -83,14 +78,17 @@ def webhook():
     return "ok", 200
 
 def create_job(job_name, notif_1, notif_2, senderid):
-    if not jobs.get(job_name):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+    cur.execute("SELECT job_name FROM jobs;")
+    job_names = cur.fetchone()
+    print(job_names)
+    if not job_names or job_name not in job_names:
         job = {}
         notifs = [int(notif_1), int(notif_2)]
         job['members'] = {senderid: notifs}
         job['notif_rates'] = notifs
         print('inserting')
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-        cur = conn.cursor()
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         cur.execute("INSERT INTO jobs (job_name, info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         conn.commit()
