@@ -13,9 +13,8 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
-cur.execute("DROP TABLE jobs")
-#cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar, notif_1 int, notif_2 int, pre_notifications varchar);")
-#cur.execute("CREATE TABLE IF NOT EXISTS members (job_name varchar, member varchar, notif_1 int, notif_2 int);")
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar, notif_1 int, notif_2 int, pre_notifications varchar);")
+cur.execute("CREATE TABLE IF NOT EXISTS members (job_name varchar, member varchar, notif_1 int, notif_2 int);")
 conn.commit()
 cur.close()
 conn.close()
@@ -82,14 +81,22 @@ def webhook():
     return "ok", 200
 
 def create_job(job_name, notif_1, notif_2, chores, senderid):
-    cur.execute("SELECT job_name FROM jobs")
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("SELECT job_name FROM jobs;")
     current_jobs = cur.fetchone()
     print(current_jobs)
     if job_name not in current_jobs:
         cur.execute("INSERT INTO jobs (job_name, members, notif_1, notif_2, chores) VALUES (%s, %s, %, %, %s);", (job_name, str([senderid]), notif_1, notif_2, chores))
     else:
         send_message(senderid, "That job already exists!")
+    cur.execute("SELECT job_name FROM jobs;")
     print(current_jobs)
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 def send_message(recipient_id, message_text):
