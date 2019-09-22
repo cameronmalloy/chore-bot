@@ -9,6 +9,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+'''
 DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -18,6 +19,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial NOT NULL PRIMARY KEY, jo
 conn.commit()
 cur.close()
 conn.close()
+'''
 
 with open('jobs.txt') as jobs:
     jobs = json.load(jobs)
