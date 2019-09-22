@@ -61,7 +61,7 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     message_parsed = message_text.split(' ')
-                    print('MESSAGE PARSED: ', message_parsed)
+                    print(chores)
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:]
                         params = params + [sender_id]
