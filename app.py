@@ -63,6 +63,14 @@ def webhook():
                         params = message_parsed[1:]
                         params = params + [sender_id]
                         create_job(*params)
+
+                    if listen_for_chores:
+                        if message_text == 'Done' or message_text == 'done':
+                            listen_for_chores = False
+                            chore_job = None
+                            add_chores()
+                        else:
+                            chores.append(message_text)
                     
                     #send_message(sender_id, "roger that!")
 
@@ -77,6 +85,9 @@ def webhook():
 
     return "ok", 200
 
+chore_job = None
+chores = []
+listen_for_chores = False
 def create_job(job_name, notif_1, notif_2, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -92,9 +103,20 @@ def create_job(job_name, notif_1, notif_2, senderid):
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         cur.execute("INSERT INTO jobs (job_name, info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         conn.commit()
-        cur.close()
-        conn.close()
-    return
+        chore_job = job_name
+        chores = []
+        listen_for_chores = True
+    else:
+        send_message(senderid, "That job already exists!")
+    cur.close()
+    conn.close()
+
+def add_chores():
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chore_job)
+    result = cur.fetchone()
+    print(result)
 
 def send_message(recipient_id, message_text):
 
