@@ -2,18 +2,25 @@ import os
 import sys
 import json
 from datetime import datetime
+import psycopg2
 
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
 
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
+cur.execute("INSERT INTO test(num, data) VALUES ({0}, {1})".format(100, "abc'def"))
+cur.execute("SELECT * FROM test;")
+print(cur.fetchone())
 
 @app.route('/', methods=['GET'])
 def verify():
     # when the endpoint is registered as a webhook, it must echo back
     # the 'hub.challenge' value it receives in the query arguments
-    print('hi')
+    print('verify')
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         if not request.args.get("hub.verify_token") == os.environ["VERIFY_TOKEN"]:
             return "Verification token mismatch", 403
@@ -24,8 +31,7 @@ def verify():
 
 @app.route('/', methods=['POST'])
 def webhook():
-    print('hello')
-    '''
+    print('webhook')
     # endpoint for processing incoming messaging events
 
     data = request.get_json()
@@ -43,7 +49,7 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    send_message(sender_id, "roger that!")
+                    #send_message(sender_id, "roger that!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -54,8 +60,8 @@ def webhook():
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
 
-    '''
     return "ok", 200
+
 
 
 def send_message(recipient_id, message_text):
