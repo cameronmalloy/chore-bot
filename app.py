@@ -46,9 +46,6 @@ def webhook():
     data = request.get_json()
     #log(data)  # you may not want to log every incoming message in production, but it's good for testing
     
-    with open('jobs.txt') as jobs:
-        jobs = json.load(jobs)
-
     if data["object"] == "page":
 
         for entry in data["entry"]:
@@ -93,6 +90,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
     job_names = cur.fetchone()
     print(job_names)
     if not job_names or job_name not in job_names:
+        chores = [True, job_name]
         job = {}
         notifs = [int(notif_1), int(notif_2)]
         job['members'] = {senderid: notifs}
@@ -101,7 +99,6 @@ def create_job(job_name, notif_1, notif_2, senderid):
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         cur.execute("INSERT INTO jobs (job_name, info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         conn.commit()
-        chores = [True, job_name]
     else:
         send_message(senderid, "That job already exists!")
     cur.close()
