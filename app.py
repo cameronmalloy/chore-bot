@@ -9,7 +9,6 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-'''
 DATABASE_URL = os.environ['DATABASE_URL']
 DELETE_TABLE = True
 
@@ -22,7 +21,6 @@ cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, chores varchar, 
 conn.commit()
 cur.close()
 conn.close()
-'''
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -37,9 +35,7 @@ def verify():
 
     return "Hello world", 200
 
-chore_job = None
-chores = []
-listen_for_chores = False
+chores = [False, None]
 
 @app.route('/', methods=['POST'])
 def webhook():
@@ -63,7 +59,6 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    '''
                     message_parsed = message_text.split(' ')
                     print('MESSAGE PARSED: ', message_parsed)
                     if message_parsed[0] == '!create':
@@ -71,14 +66,13 @@ def webhook():
                         params = params + [sender_id]
                         create_job(*params)
 
-                    if listen_for_chores:
+                    if chores[0]:
                         if message_text == 'Done' or message_text == 'done':
-                            listen_for_chores = False
-                            chore_job = None
+                            chores[0] = False
+                            chores[1] = None
                             add_chores()
                         else:
                             chores.append(message_text)
-                    '''
                     
                     #send_message(sender_id, "roger that!")
 
@@ -93,7 +87,6 @@ def webhook():
 
     return "ok", 200
 
-'''
 def create_job(job_name, notif_1, notif_2, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -118,13 +111,11 @@ def create_job(job_name, notif_1, notif_2, senderid):
     conn.close()
 
 def add_chores():
-    global chore_job, chores, listen_for_chores
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chore_job)
+    cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chores[1])
     result = cur.fetchone()
     print(result)
-'''
 
 def send_message(recipient_id, message_text):
 
