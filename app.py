@@ -10,6 +10,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+'''
 DATABASE_URL = os.environ['DATABASE_URL']
 DELETE_TABLE = True
 
@@ -22,6 +23,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, info json);")
 conn.commit()
 cur.close()
 conn.close()
+'''
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -56,12 +58,14 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
+                    '''
                     message_parsed = message_text.split(' ')
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:]
                         params = params + [sender_id]
                         print(params)
                         #create_job(*params)
+                    '''
                     
                     #send_message(sender_id, "roger that!")
 
@@ -76,6 +80,7 @@ def webhook():
 
     return "ok", 200
 
+'''
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -96,6 +101,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
         send_message(senderid, "That job already exists!")
     cur.close()
     conn.close()
+'''
 
 def send_message(recipient_id, message_text):
 
