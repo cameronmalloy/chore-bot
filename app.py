@@ -57,11 +57,15 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     message_parsed = message_text.split(' ')
+                    print(message_parsed)
+
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:]
                         params = params + [sender_id]
                         #print(params)
                         create_job(*params)
+                    elif message_parsed[0] == '!join':
+                        add_member(message_parsed[1], sender_id)
                     
                     #send_message(sender_id, "roger that!")
 
@@ -96,6 +100,18 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
         send_message(senderid, "That job already exists!")
     cur.close()
     conn.close()
+
+def add_member(job_name, senderid):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+    cur.execute("SELECT job_name FROM jobs;")
+    job_names = cur.fetchone()
+    if job_name in job_names:
+        cur.execute("SELECT info FROM jobs WHERE job_name = %s" % job_name)
+        info = cur.fetchone()
+        print(info)
+    else:
+        send_message(senderid, "That job doesn't exist!")
 
 def send_message(recipient_id, message_text):
 
