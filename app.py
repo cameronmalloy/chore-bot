@@ -25,7 +25,7 @@ def verify():
 @app.route('/', methods=['POST'])
 def webhook():
     print('hello')
-
+    '''
     # endpoint for processing incoming messaging events
 
     data = request.get_json()
@@ -54,6 +54,7 @@ def webhook():
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
 
+    '''
     return "ok", 200
 
 
