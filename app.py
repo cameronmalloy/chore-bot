@@ -90,7 +90,9 @@ def create_job(job_name, notif_1, notif_2, senderid):
     job_names = cur.fetchone()
     print(job_names)
     if not job_names or job_name not in job_names:
+        print('DEBUG:', chores)
         chores = [True, job_name]
+        print('DEBUG:', chores)
         job = {}
         notifs = [int(notif_1), int(notif_2)]
         job['members'] = {senderid: notifs}
