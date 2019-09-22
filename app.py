@@ -110,6 +110,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
 
 def add_chores():
     global chores
+    print('adding chores')
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chores[1])
