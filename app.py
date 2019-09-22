@@ -77,7 +77,7 @@ def webhook():
 
     return "ok", 200
 
-def create_job(job_name, senderid, notif_1, notif_2, chores):
+def create_job(job_name, notif_1, notif_2, chores, senderid):
     cur.execute("SELECT job_name FROM jobs")
     current_jobs = cur.fetchone()
     print(current_jobs)
