@@ -9,9 +9,9 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+'''
 DATABASE_URL = os.environ['DATABASE_URL']
 
-'''
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar, notif_1 int, notif_2 int, pre_notifications varchar);")
