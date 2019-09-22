@@ -9,7 +9,6 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-'''
 DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -19,7 +18,6 @@ cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial NOT NULL PRIMARY KEY, jo
 conn.commit()
 cur.close()
 conn.close()
-'''
 
 with open('jobs.txt') as jobs:
     jobs = json.load(jobs)
@@ -81,7 +79,6 @@ def webhook():
 
     return "ok", 200
 
-'''
 def create_job(job_name, notif_1, notif_2, senderid):
     if not jobs.get(job_name):
         job = {}
@@ -96,7 +93,6 @@ def create_job(job_name, notif_1, notif_2, senderid):
         cur.close()
         conn.close()
     return
-'''
 
 def send_message(recipient_id, message_text):
 
