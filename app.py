@@ -71,11 +71,9 @@ def webhook():
 
                     message_parsed = message_text.split(' ')
                     print('MESSAGE PARSED: ', message_parsed)
-                    '''
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:] + [sender_id]
                         create_job(*params)
-                    '''
 
                     #send_message(sender_id, "roger that!")
 
@@ -90,7 +88,6 @@ def webhook():
 
     return "ok", 200
 
-'''
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -108,7 +105,6 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn.commit()
     cur.close()
     conn.close()
-    '''
 
 
 def send_message(recipient_id, message_text):
