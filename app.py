@@ -9,6 +9,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+'''
 DATABASE_URL = os.environ['DATABASE_URL']
 DELETE_TABLE = True
 
@@ -17,10 +18,11 @@ cur = conn.cursor()
 #cur.execute("DROP TABLE jobs")
 if DELETE_TABLE:
     cur.execute("DROP TABLE jobs;")
-cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, info json);")
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, chores varchar, info json);")
 conn.commit()
 cur.close()
 conn.close()
+'''
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -90,6 +92,7 @@ def webhook():
 
     return "ok", 200
 
+'''
 def create_job(job_name, notif_1, notif_2, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -120,6 +123,7 @@ def add_chores():
     cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chore_job)
     result = cur.fetchone()
     print(result)
+'''
 
 def send_message(recipient_id, message_text):
 
