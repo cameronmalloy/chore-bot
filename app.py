@@ -9,27 +9,8 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-'''
-DATABASE_URL = os.environ['DATABASE_URL']
-
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-cur = conn.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar, notif_1 int, notif_2 int, notification_times_bools varchar, chores varchar);")
-conn.commit()
-cur.close()
-conn.close()
-'''
-
-### EXAMPLE OF HOW TO INSERT ###
-'''
-cur.execute("INSERT INTO jobs (job_name, members, notifications, chores) VALUES (%s, %s, %s, %s);", ("TEST", "['member1', 'member2']", "notifications_test", "chores_test"))
-cur.execute("SELECT * FROM jobs;")
-print(cur.fetchone())
-
-conn.commit()
-cur.close()
-conn.close()
-'''
+with open('jobs.txt') as jobs:
+    jobs = json.load(jobs)
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -68,10 +49,8 @@ def webhook():
                     print('MESSAGE PARSED: ', message_parsed)
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:]
-                        params[-1] = str(params[-1])
                         params = params + [sender_id]
-                        print(params)
-                        #create_job(*params)
+                        create_job(*params)
 
                     #send_message(sender_id, "roger that!")
 
@@ -86,26 +65,14 @@ def webhook():
 
     return "ok", 200
 
-'''
-def create_job(job_name, notif_1, notif_2, chores, senderid):
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cur = conn.cursor()
-
-    cur.execute("SELECT job_name FROM jobs;")
-    current_jobs = cur.fetchone()
-    print(current_jobs)
-    if current_jobs is None or job_name not in current_jobs:
-        cur.execute("INSERT INTO jobs (job_name, members, notif_1, notif_2, notification_times_bools, chores) VALUES (%s, %s, %, %, %s);", (job_name, str([senderid]), int(notif_1), int(notif_2), str([[int(notif_1), int(notif_2)]]), chores))
-    else:
-        send_message(senderid, "That job already exists!")
-    cur.execute("SELECT job_name FROM jobs;")
-    print(current_jobs)
-
-    conn.commit()
-    cur.close()
-    conn.close()
-'''
-
+def create_job(job_name, notif_1, notif_2, senderid):
+    if not jobs.get(job_name):
+        jobs[job_name] = {}
+        job = jobs[job_name]
+        job['members'] = {senderid: [notif_1, notif_2]}
+        job['notif_rates'] = [notif_1, notif_2]
+    with open('jobs.txt', 'w') as outfile:
+        json.dump(jobs, outfile)
 
 def send_message(recipient_id, message_text):
 
