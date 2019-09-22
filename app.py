@@ -67,6 +67,7 @@ def webhook():
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:].append(sender_id)
                         create_job(*params)
+                    # this means nothing
 
                     #send_message(sender_id, "roger that!")
 
