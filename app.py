@@ -82,6 +82,7 @@ def webhook():
     return "ok", 200
 
 def create_job(job_name, notif_1, notif_2, senderid):
+    '''
     if not jobs.get(job_name):
         job = {}
         job['members'] = {senderid: [notif_1, notif_2]}
@@ -94,6 +95,8 @@ def create_job(job_name, notif_1, notif_2, senderid):
         conn.commit()
         cur.close()
         conn.close()
+    '''
+    return
 
 def send_message(recipient_id, message_text):
 
