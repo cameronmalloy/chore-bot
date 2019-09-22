@@ -18,6 +18,10 @@ cur.execute("INSERT INTO jobs (name, members, notifications, pre_notifications) 
 cur.execute("SELECT * FROM jobs;")
 print(cur.fetchone())
 
+conn.commit()
+cur.close()
+conn.close()
+
 @app.route('/', methods=['GET'])
 def verify():
     # when the endpoint is registered as a webhook, it must echo back
