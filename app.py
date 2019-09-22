@@ -39,6 +39,7 @@ chores = [False, None]
 
 @app.route('/', methods=['POST'])
 def webhook():
+    global chores
     print('webhook')
     # endpoint for processing incoming messaging events
 
@@ -68,8 +69,7 @@ def webhook():
 
                     if chores[0]:
                         if message_text == 'Done' or message_text == 'done':
-                            chores[0] = False
-                            chores[1] = None
+                            chores = [False, None]
                             add_chores()
                         else:
                             chores.append(message_text)
@@ -88,6 +88,7 @@ def webhook():
     return "ok", 200
 
 def create_job(job_name, notif_1, notif_2, senderid):
+    global chores
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     cur.execute("SELECT job_name FROM jobs;")
@@ -102,9 +103,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         cur.execute("INSERT INTO jobs (job_name, info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         conn.commit()
-        chore_job = job_name
-        chores = []
-        listen_for_chores = True
+        chores = [True, job_name]
     else:
         send_message(senderid, "That job already exists!")
     cur.close()
