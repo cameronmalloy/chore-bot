@@ -64,6 +64,7 @@ def webhook():
                     message_text = messaging_event["message"]["text"]  # the message's text
 
                     message_parsed = message_text.split(' ')
+                    print('MESSAGE PARSED: ', message_parsed)
                     if message_parsed[0] == '!create':
                         params = message_parsed[1:] + [sender_id]
                         create_job(*params)
@@ -88,7 +89,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     cur.execute("SELECT job_name FROM jobs;")
     current_jobs = cur.fetchone()
     print(current_jobs)
-    if job_name not in current_jobs:
+    if current_jobs and job_name not in current_jobs:
         cur.execute("INSERT INTO jobs (job_name, members, notif_1, notif_2, chores) VALUES (%s, %s, %, %, %s);", (job_name, str([senderid]), notif_1, notif_2, chores))
     else:
         send_message(senderid, "That job already exists!")
