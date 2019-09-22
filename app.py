@@ -69,7 +69,6 @@ def webhook():
 
                     if chores[0]:
                         if message_text == 'Done' or message_text == 'done':
-                            chores = [False, None]
                             add_chores()
                         else:
                             chores.append(message_text)
@@ -110,11 +109,13 @@ def create_job(job_name, notif_1, notif_2, senderid):
     conn.close()
 
 def add_chores():
+    global chores
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chores[1])
     result = cur.fetchone()
     print(result)
+    chores = [False, None]
 
 def send_message(recipient_id, message_text):
 
