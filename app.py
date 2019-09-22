@@ -13,7 +13,8 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial NOT NULL PRIMARY KEY, info json NOT NULL);")
+cur.execute("DROP TABLE jobs")
+#cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial NOT NULL PRIMARY KEY, job_name varchar, info json NOT NULL);")
 conn.commit()
 cur.close()
 conn.close()
