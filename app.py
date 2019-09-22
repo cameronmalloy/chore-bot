@@ -11,17 +11,14 @@ app = Flask(__name__)
 
 #DATABASE_URL = os.environ['DATABASE_URL']
 
-'''
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, members varchar, notif_1 int, notif_2 int, notification_times_bools varchar, chores varchar);")
 conn.commit()
 cur.close()
 conn.close()
-'''
 
 ### EXAMPLE OF HOW TO INSERT ###
-'''
 cur.execute("INSERT INTO jobs (job_name, members, notifications, chores) VALUES (%s, %s, %s, %s);", ("TEST", "['member1', 'member2']", "notifications_test", "chores_test"))
 cur.execute("SELECT * FROM jobs;")
 print(cur.fetchone())
@@ -29,7 +26,6 @@ print(cur.fetchone())
 conn.commit()
 cur.close()
 conn.close()
-'''
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -64,7 +60,6 @@ def webhook():
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
 
-                    '''
                     message_parsed = message_text.split(' ')
                     print('MESSAGE PARSED: ', message_parsed)
                     if message_parsed[0] == '!create':
@@ -72,7 +67,6 @@ def webhook():
                         params[-1] = str(params[-1])
                         params = params + [sender_id]
                         create_job(*params)
-                    '''
 
                     #send_message(sender_id, "roger that!")
 
@@ -87,7 +81,6 @@ def webhook():
 
     return "ok", 200
 
-'''
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -105,7 +98,6 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn.commit()
     cur.close()
     conn.close()
-'''
 
 
 def send_message(recipient_id, message_text):
