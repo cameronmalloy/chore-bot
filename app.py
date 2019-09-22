@@ -12,13 +12,10 @@ app = Flask(__name__)
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
-try:
-    cur.execute("SELECT * FROM jobs LIMIT 10;")
-except:
-    cur.execute("CREATE TABLE jobs (id serial PRIMARY KEY, name varchar, members varchar, notifications varchar, pre_notifications varchar);")
-    cur.execute("INSERT INTO jobs (name, members, notifications, pre_notifications) VALUES (%s, %s, %s, %s)", ("TEST", "member_test", "notifications_test", "pre_notifications_test"))
-    cur.execute("SELECT * FROM test;")
-    print(cur.fetchone())
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (id serial PRIMARY KEY, name varchar, members varchar, notifications varchar, pre_notifications varchar);")
+cur.execute("INSERT INTO jobs (name, members, notifications, pre_notifications) VALUES (%s, %s, %s, %s);", ("TEST", "member_test", "notifications_test", "pre_notifications_test"))
+cur.execute("SELECT * FROM jobs;")
+print(cur.fetchone())
 
 @app.route('/', methods=['GET'])
 def verify():
