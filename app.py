@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import ast
 from datetime import datetime
 import psycopg2
 
@@ -12,7 +13,6 @@ app = Flask(__name__)
 DATABASE_URL = os.environ['DATABASE_URL']
 DELETE_TABLE = True
 
-chores = [False, None]
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cur = conn.cursor()
@@ -40,7 +40,6 @@ def verify():
 
 @app.route('/', methods=['POST'])
 def webhook():
-    global chores
     print('webhook')
     # endpoint for processing incoming messaging events
 
@@ -65,11 +64,6 @@ def webhook():
                         params = message_parsed[1:]
                         params = params + [sender_id]
                         create_job(*params)
-                    elif chores[0]:
-                        if message_text == 'Done' or message_text == 'done':
-                            add_chores()
-                        else:
-                            chores.append(message_text)
                     
                     #send_message(sender_id, "roger that!")
 
@@ -84,7 +78,7 @@ def webhook():
 
     return "ok", 200
 
-def create_job(job_name, notif_1, notif_2, senderid):
+def create_job(job_name, notif_1, notif_2, chores, senderid):
     global chores
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
@@ -99,6 +93,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
         notifs = [int(notif_1), int(notif_2)]
         job['members'] = {senderid: notifs}
         job['notif_rates'] = notifs
+        job['chores'] = ast.literal_eval(chores)
         print('inserting')
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
         cur.execute("INSERT INTO jobs (job_name, info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
@@ -107,16 +102,6 @@ def create_job(job_name, notif_1, notif_2, senderid):
         send_message(senderid, "That job already exists!")
     cur.close()
     conn.close()
-
-def add_chores():
-    global chores
-    print('adding chores')
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM jobs WHERE job_name = %s" % chores[1])
-    result = cur.fetchone()
-    print(result)
-    chores = [False, None]
 
 def send_message(recipient_id, message_text):
 
