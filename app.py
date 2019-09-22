@@ -17,7 +17,7 @@ cur = conn.cursor()
 #cur.execute("DROP TABLE jobs")
 if DELETE_TABLE:
     cur.execute("DROP TABLE jobs;")
-cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, info json);")
+cur.execute("CREATE TABLE IF NOT EXISTS jobs (job_name varchar, chores varchar, info json);")
 conn.commit()
 cur.close()
 conn.close()
