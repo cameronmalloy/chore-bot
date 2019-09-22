@@ -9,7 +9,6 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-'''
 DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -19,7 +18,6 @@ cur.execute("CREATE TABLE IF NOT EXISTS members (job_name varchar, member varcha
 conn.commit()
 cur.close()
 conn.close()
-'''
 
 ### EXAMPLE OF HOW TO INSERT ###
 '''
