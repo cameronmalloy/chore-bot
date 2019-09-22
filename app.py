@@ -75,6 +75,7 @@ def create_job(job_name, notif_1, notif_2, senderid):
         job['notif_rates'] = [notif_1, notif_2]
     print(jobs)
     with open('jobs.txt', 'w') as outfile:
+        print("I'M WRITING!")
         json.dump(jobs, outfile)
 
 def send_message(recipient_id, message_text):
