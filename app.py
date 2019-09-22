@@ -85,8 +85,9 @@ def webhook():
 def create_job(job_name, notif_1, notif_2, senderid):
     if not jobs.get(job_name):
         job = {}
-        job['members'] = {senderid: [notif_1, notif_2]}
-        job['notif_rates'] = [notif_1, notif_2]
+        notifs = [int(notif_1), int(notif_2)]
+        job['members'] = {senderid: notifs}
+        job['notif_rates'] = notifs
         print('inserting')
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()
