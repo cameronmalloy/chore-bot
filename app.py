@@ -109,8 +109,10 @@ def add_member(job_name, senderid):
     print('Job Names:', job_names)
     if job_name in job_names:
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
-        info = cur.fetchone()
-        print(info)
+        info = cur.fetchone()[0]
+        info = ast.literal_eval(info)
+        info['members']['EXAMPLE'] = info['notif_rates']
+        cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (info, job_name))
     else:
         send_message(senderid, "That job doesn't exist!")
 
