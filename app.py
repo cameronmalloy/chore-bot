@@ -106,6 +106,8 @@ def add_member(job_name, senderid):
     cur = conn.cursor()
     cur.execute("SELECT job_name FROM jobs;")
     job_names = cur.fetchone()
+    print(job_names)
+    return
     if job_name in job_names:
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
         info = cur.fetchone()
