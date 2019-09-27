@@ -115,8 +115,11 @@ def add_member(job_name, senderid):
         info = cur.fetchone()[0]
         info['members']['EXAMPLE'] = info['notif_rates']
         cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (json.dumps(info), job_name))
+        conn.commit()
     else:
         send_message(senderid, "That job doesn't exist!")
+    cur.close()
+    conn.close()
 
 def send_message(recipient_id, message_text):
 
