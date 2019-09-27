@@ -66,7 +66,7 @@ def webhook():
                         create_job(*params)
                     elif message_parsed[0] == '!join':
                         if len(message_parsed) != 2:
-                            send_message(senderid, 'Must join a job!')
+                            send_message(sender_id, 'Must join a job!')
                         else:
                             add_member(message_parsed[1], sender_id)
                     
