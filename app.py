@@ -110,7 +110,7 @@ def add_member(job_name, senderid):
     cur.execute("SELECT job_name FROM jobs;")
     job_names = cur.fetchone()
     print('Job Names:', job_names)
-    if type(job_names) == list and job_name in job_names:
+    if type(job_names) == tuple and job_name in job_names:
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
         info = cur.fetchone()[0]
         #info = ast.literal_eval(info)
