@@ -114,7 +114,10 @@ def add_member(job_name, senderid):
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
         info = cur.fetchone()[0]
         #info = ast.literal_eval(info)
-        print(type(info))
+        try:
+            print(info.keys())
+        except:
+            print("can't print keys")
         '''
         info['members']['EXAMPLE'] = info['notif_rates']
         cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (info, job_name))
