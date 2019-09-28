@@ -97,10 +97,14 @@ def webhook():
 def notify():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
-    cur.execute("SELECT job_name, info -> 'members', info -> 'notif_rates', info -> 'chores' FROM jobs;")
+    #cur.execute("SELECT job_name, info -> 'members', info -> 'notif_rates', info -> 'chores' FROM jobs;")
+    cur.execute("SELECT job_name, info")
     result = cur.fetchall()
     for r in result:
-        job_name, members, notif_rates, chores = r
+        #job_name, members, notif_rates, chores = r
+        job_name, info = r
+        members, notif_rates, chores = info['members'], info['notif_rates'], info['chores']
+        print(members, notif_rates, chores)
         #mem_chore_combo = zip(members, chores)
         curr_notif_rates = notif_rates['current']
         orig_notif_rates = notif_rates['original']
