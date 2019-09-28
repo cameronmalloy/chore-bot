@@ -131,10 +131,10 @@ def notify_message(members, chores, shuffle=False):
         chores = chores[1:]
     print(members, chores)
     for m, c in zip(list(set(members)), chores):
-        try:
+        if m == 'EXAMPLE':
+            continue
+        else:
             send_message(m, 'Reminder: {}'.format(c))
-        except:
-            print('something went wrong with', m, c)
 
 def update(job_name, info):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
