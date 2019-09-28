@@ -130,7 +130,7 @@ def notify_message(members, chores, shuffle=False):
     members_set = set(members)
     members = [m for m in members if m in members_set]
     print(members, chores)
-    for m, c in zip(list(set(members)), chores):
+    for m, c in zip(members, chores):
         print(m, c)
         if m == 'EXAMPLE':
             continue
