@@ -125,25 +125,16 @@ def notify():
 
 def notify_message(members, chores, shuffle=False):
     if shuffle:
-        print(members, chores)
         members.append(members[0])
-        print(members, chores)
         members = members[1:]
-        print(members, chores)
         chores.append(chores[0])
-        print(members, chores)
         chores = chores[1:]
-        print(members, chores)
     print(members, chores)
-    return (0, 0)
-    '''
     for m, c in zip(list(set(members)), chores):
         try:
             send_message(m, 'Reminder: {}'.format(c))
         except:
             print('something went wrong with', m, c)
-            '''
-
 
 def update(job_name, info):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
