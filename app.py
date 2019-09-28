@@ -112,7 +112,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
     if not job_names or job_name not in job_names:
         job = {}
         notifs = [int(notif_1), int(notif_2)]
-        job['members'] = {senderid: notifs}
+        job['members'] = [senderid]
         job['notif_rates'] = notifs
         job['chores'] = ast.literal_eval(chores)
         print('inserting')
@@ -133,7 +133,7 @@ def add_member(job_name, senderid):
     if type(job_names) == tuple and job_name in job_names:
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
         info = cur.fetchone()[0]
-        info['members']['EXAMPLE'] = info['notif_rates']
+        info['members'].append('EXAMPLE')
         cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (json.dumps(info), job_name))
         conn.commit()
     else:
