@@ -98,7 +98,7 @@ def notify():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     #cur.execute("SELECT job_name, info -> 'members', info -> 'notif_rates', info -> 'chores' FROM jobs;")
-    cur.execute("SELECT job_name, info")
+    cur.execute("SELECT job_name, info FROM jobs;")
     result = cur.fetchall()
     for r in result:
         #job_name, members, notif_rates, chores = r
