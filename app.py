@@ -99,15 +99,40 @@ def notify():
     cur = conn.cursor()
     cur.execute("SELECT job_name, info -> 'members', info -> 'notif_rates', info -> 'chores' FROM jobs;")
     result = cur.fetchall()
-    print(type(result), result)
-    '''
     for r in result:
         job_name, members, notif_rates, chores = r
-        mem_chore_combo = zip(members, chores)
-        if 0 in notif_rates
-        '''
+        #mem_chore_combo = zip(members, chores)
+        curr_notif_rates = notif_rates['current']
+        orig_notif_rates = notif_rates['original']
+        if curr_notif_rates[0] == 0:
+            members, chores = notify_message(members, chores)
+            curr_notif_rates[0] = orig_notif_rates[0] + 1
+        if curr_notif_rates[1] == 0:
+            members, chores = notify_message(members, chores, True)
+            curr_notif_rates[1] = orig_notif_rates[1] + 1
+        curr_notif_rates[0] -= 1
+        curr_notif_rates[1] -= 1
     cur.close()
     conn.close()
+
+def notify_message(members, chores, shuffle=False):
+    if shuffle:
+        members.append(members[0])
+        members = members[1:]
+        chores.append(chores[0])
+        chores = members[1:]
+    for m, c in zip(members, chores):
+        send_message(m, 'Reminder: {}'.format(c))
+
+
+def update(job_name, info):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+    cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (json.dumps(info), job_name))
+    conn.commit()
+    cur.close()
+    conn.close()
+
 
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -140,7 +165,8 @@ def add_member(job_name, senderid):
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
         info = cur.fetchone()[0]
         info['members'].append('EXAMPLE')
-        cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (json.dumps(info), job_name))
+        update(job_name, info)
+        #cur.execute("UPDATE jobs SET info = '%s' WHERE job_name = '%s'" % (json.dumps(info), job_name))
         conn.commit()
     else:
         send_message(senderid, "That job doesn't exist!")
