@@ -138,6 +138,7 @@ def notify_message(members, chores, shuffle=False):
             continue
         else:
             send_message(m, 'Reminder: {}'.format(c))
+    return members, chores
 
 def update(job_name, info):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
