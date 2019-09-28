@@ -129,8 +129,11 @@ def notify_message(members, chores, shuffle=False):
         members = members[1:]
         chores.append(chores[0])
         chores = chores[1:]
+    members_set = set(members)
+    members = [m for m in members if m in members_set]
     print(members, chores)
     for m, c in zip(list(set(members)), chores):
+        print(m, c)
         if m == 'EXAMPLE':
             continue
         else:
