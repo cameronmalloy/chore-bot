@@ -5,12 +5,21 @@ import ast
 from datetime import datetime
 import psycopg2
 
+from apscheduler.schedulers.blocking import BlockingScheduler
+
 import requests
 from flask import Flask, request
 
+# Start Flask
 app = Flask(__name__)
 
+# Start Scheduler
+sched = BlockingScheduler()
+
+### DB STUFF ###
 DATABASE_URL = os.environ['DATABASE_URL']
+
+# CHANGEME
 DELETE_TABLE = True
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -69,6 +78,8 @@ def webhook():
                             send_message(sender_id, 'Must join a job!')
                         else:
                             add_member(message_parsed[1], sender_id)
+                    elif message_parsed[0] == 'test':
+                        notify()
                     
                     #send_message(sender_id, "roger that!")
 
@@ -82,6 +93,13 @@ def webhook():
                     pass
 
     return "ok", 200
+
+def notify():
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+    cur.execute("SELECT job_name, info -> notif_rates FROM jobs;")
+    result = cur.fetchone()
+    print(type(result), result)
 
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -143,6 +161,7 @@ def send_message(recipient_id, message_text):
     if r.status_code != 200:
         print(r.status_code)
         print(r.text)
+
 
 
 def log(msg, *args, **kwargs):  # simple wrapper for logging to stdout on heroku
