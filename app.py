@@ -102,11 +102,9 @@ def notify():
     result = cur.fetchall()
     for r in result:
         #job_name, members, notif_rates, chores = r
-        print(r)
         job_name, info = r
         members, notif_rates, chores = info['members'], info['notif_rates'], info['chores']
         #mem_chore_combo = zip(members, chores)
-        '''
         curr_notif_rates = notif_rates['current']
         orig_notif_rates = notif_rates['original']
         if curr_notif_rates[0] == 0:
@@ -115,6 +113,7 @@ def notify():
         if curr_notif_rates[1] == 0:
             members, chores = notify_message(members[:], chores[:], True)
             curr_notif_rates[1] = orig_notif_rates[1] + 1
+        '''
         curr_notif_rates[0] -= 1
         curr_notif_rates[1] -= 1
         info['notif_rates']['current'] = curr_notif_rates
@@ -125,6 +124,7 @@ def notify():
     conn.close()
 
 def notify_message(members, chores, shuffle=False):
+    return (0, 0)
     if shuffle:
         members.append(members[0])
         members = members[1:]
