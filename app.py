@@ -169,9 +169,12 @@ def add_member(job_name, senderid):
     cur = conn.cursor()
     cur.execute("SELECT job_name FROM jobs;")
     job_names = cur.fetchall()
+    try:
+        job_names = [name[0] for name in job_names]
+    except:
+        send_message(senderid, "Couldn't add member :,(")
     print('Job Names:', job_names)
-    return
-    if type(job_names) == tuple and job_name in job_names:
+    if type(job_names) == list and job_name in job_names:
         cur.execute("SELECT info FROM jobs WHERE job_name = '%s'" % job_name)
         info = cur.fetchone()[0]
         info['members'].append('EXAMPLE')
