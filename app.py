@@ -104,7 +104,6 @@ def notify():
         #job_name, members, notif_rates, chores = r
         job_name, info = r
         members, notif_rates, chores = info['members'], info['notif_rates'], info['chores']
-        print(members, notif_rates, chores)
         #mem_chore_combo = zip(members, chores)
         curr_notif_rates = notif_rates['current']
         orig_notif_rates = notif_rates['original']
@@ -116,6 +115,9 @@ def notify():
             curr_notif_rates[1] = orig_notif_rates[1] + 1
         curr_notif_rates[0] -= 1
         curr_notif_rates[1] -= 1
+        info['notif_rates']['current'] = curr_notif_rates
+        info['chores'] = chores
+        print(info)
     cur.close()
     conn.close()
 
