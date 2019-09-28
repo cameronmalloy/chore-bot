@@ -112,14 +112,12 @@ def notify():
             curr_notif_rates[0] = orig_notif_rates[0] + 1
         if curr_notif_rates[1] == 0:
             new_members, new_chores = notify_message(members[:], chores[:], True)
-            curr_notif_rates[1] = orig_notif_rates[1] + 1
-        '''
+            curr_notif_rates[1] = curr_notif_rates[0] + (orig_notif_rates[1] - orig_notif_rates[0]) + 1
         curr_notif_rates[0] -= 1
         curr_notif_rates[1] -= 1
         info['notif_rates']['current'] = curr_notif_rates
         info['chores'] = chores
         print(info)
-        '''
     cur.close()
     conn.close()
 
