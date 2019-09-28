@@ -124,7 +124,6 @@ def notify():
     conn.close()
 
 def notify_message(members, chores, shuffle=False):
-    return (0, 0)
     if shuffle:
         members.append(members[0])
         members = members[1:]
