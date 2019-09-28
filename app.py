@@ -108,10 +108,10 @@ def notify():
         curr_notif_rates = notif_rates['current']
         orig_notif_rates = notif_rates['original']
         if curr_notif_rates[0] == 0:
-            members, chores = notify_message(members, chores)
+            members, chores = notify_message(members[:], chores[:])
             curr_notif_rates[0] = orig_notif_rates[0] + 1
         if curr_notif_rates[1] == 0:
-            members, chores = notify_message(members, chores, True)
+            members, chores = notify_message(members[:], chores[:], True)
             curr_notif_rates[1] = orig_notif_rates[1] + 1
         curr_notif_rates[0] -= 1
         curr_notif_rates[1] -= 1
@@ -127,6 +127,8 @@ def notify_message(members, chores, shuffle=False):
         members = members[1:]
         chores.append(chores[0])
         chores = members[1:]
+    print(members, chores)
+    return
     for m, c in zip(list(set(members)), chores):
         try:
             send_message(m, 'Reminder: {}'.format(c))
