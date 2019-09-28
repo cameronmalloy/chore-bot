@@ -129,11 +129,13 @@ def notify_message(members, chores, shuffle=False):
         chores = members[1:]
     print(members, chores)
     return
+    '''
     for m, c in zip(list(set(members)), chores):
         try:
             send_message(m, 'Reminder: {}'.format(c))
         except:
             print('something went wrong with', m, c)
+            '''
 
 
 def update(job_name, info):
