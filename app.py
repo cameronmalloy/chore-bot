@@ -124,15 +124,18 @@ def notify():
     conn.close()
 
 def notify_message(members, chores, shuffle=False):
+    if shuffle:
+        print(members, chores)
+        members.append(members[0])
+        print(members, chores)
+        members = members[1:]
+        print(members, chores)
+        chores.append(chores[0])
+        print(members, chores)
+        chores = chores[1:]
+        print(members, chores)
     print(members, chores)
     return (0, 0)
-    if shuffle:
-        members.append(members[0])
-        members = members[1:]
-        chores.append(chores[0])
-        chores = members[1:]
-    print(members, chores)
-    return
     '''
     for m, c in zip(list(set(members)), chores):
         try:
