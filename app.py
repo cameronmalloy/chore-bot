@@ -117,7 +117,7 @@ def notify():
         curr_notif_rates[1] -= 1
         info['notif_rates']['current'] = curr_notif_rates
         info['chores'] = chores
-        print(info)
+        update(job_name, info)
     cur.close()
     conn.close()
 
