@@ -98,7 +98,7 @@ def notify():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     cur.execute("SELECT job_name, info -> 'notif_rates' FROM jobs;")
-    result = cur.fetchone()
+    result = cur.fetchall()
     print(type(result), result)
     cur.close()
     conn.close()
