@@ -97,9 +97,15 @@ def webhook():
 def notify():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
-    cur.execute("SELECT job_name, info -> 'notif_rates' FROM jobs;")
+    cur.execute("SELECT job_name, info -> 'members', info -> 'notif_rates', info -> 'chores' FROM jobs;")
     result = cur.fetchall()
     print(type(result), result)
+    '''
+    for r in result:
+        job_name, members, notif_rates, chores = r
+        mem_chore_combo = zip(members, chores)
+        if 0 in notif_rates
+        '''
     cur.close()
     conn.close()
 
@@ -113,7 +119,7 @@ def create_job(job_name, notif_1, notif_2, chores, senderid):
         job = {}
         notifs = [int(notif_1), int(notif_2)]
         job['members'] = [senderid]
-        job['notif_rates'] = notifs
+        job['notif_rates'] = {'original': notifs, 'current': notifs}
         job['chores'] = ast.literal_eval(chores)
         print('inserting')
         print("INSERT INTO jobs (info) VALUES ('%s', '%s')" % (job_name, json.dumps(job)))
