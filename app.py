@@ -78,7 +78,7 @@ def webhook():
                             send_message(sender_id, 'Must join a job!')
                         else:
                             add_member(message_parsed[1], sender_id)
-                    elif message_parsed[0] == 'test':
+                    elif message_parsed[0] == '!test':
                         notify()
                     
                     #send_message(sender_id, "roger that!")
@@ -97,9 +97,11 @@ def webhook():
 def notify():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
-    cur.execute("SELECT job_name, info -> notif_rates FROM jobs;")
+    cur.execute("SELECT job_name, info -> 'notif_rates' FROM jobs;")
     result = cur.fetchone()
     print(type(result), result)
+    cur.close()
+    conn.close()
 
 def create_job(job_name, notif_1, notif_2, chores, senderid):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
