@@ -102,9 +102,11 @@ def notify():
     result = cur.fetchall()
     for r in result:
         #job_name, members, notif_rates, chores = r
+        print(r)
         job_name, info = r
         members, notif_rates, chores = info['members'], info['notif_rates'], info['chores']
         #mem_chore_combo = zip(members, chores)
+        '''
         curr_notif_rates = notif_rates['current']
         orig_notif_rates = notif_rates['original']
         if curr_notif_rates[0] == 0:
@@ -118,6 +120,7 @@ def notify():
         info['notif_rates']['current'] = curr_notif_rates
         info['chores'] = chores
         print(info)
+        '''
     cur.close()
     conn.close()
 
